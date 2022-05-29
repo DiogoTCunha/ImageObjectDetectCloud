@@ -8,27 +8,26 @@ public interface ImageObjectsOrBuilder extends
     com.google.protobuf.MessageOrBuilder {
 
   /**
-   * <code>repeated string objects = 1;</code>
-   * @return A list containing the objects.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
-  java.util.List<java.lang.String>
+  java.util.List<imagedetect.Object> 
       getObjectsList();
   /**
-   * <code>repeated string objects = 1;</code>
-   * @return The count of objects.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
+   */
+  imagedetect.Object getObjects(int index);
+  /**
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
   int getObjectsCount();
   /**
-   * <code>repeated string objects = 1;</code>
-   * @param index The index of the element to return.
-   * @return The objects at the given index.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
-  java.lang.String getObjects(int index);
+  java.util.List<? extends imagedetect.ObjectOrBuilder> 
+      getObjectsOrBuilderList();
   /**
-   * <code>repeated string objects = 1;</code>
-   * @param index The index of the value to return.
-   * @return The bytes of the objects at the given index.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
-  com.google.protobuf.ByteString
-      getObjectsBytes(int index);
+  imagedetect.ObjectOrBuilder getObjectsOrBuilder(
+      int index);
 }

@@ -150,14 +150,6 @@ public class MessageReceiveHandler implements MessageReceiver {
         ObjectDetectApp.firestore.collection(ObjectDetectApp.FIRESTORE_COLLECTION)
                 .document(result.blobData.blobName)
                 .set(result);
-
-        HashMap<String, Object> map = new HashMap<String, Object>() {
-            {
-                put("first", "Bill");
-                put("last", "Grates");
-                put("born", 1955);
-            }
-        };
     }
 
 }

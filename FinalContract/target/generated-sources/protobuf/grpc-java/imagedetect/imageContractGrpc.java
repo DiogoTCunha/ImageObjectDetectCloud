@@ -59,34 +59,34 @@ public final class imageContractGrpc {
   }
 
   private static volatile io.grpc.MethodDescriptor<imagedetect.ImageId,
-      imagedetect.ImageObjects> getGetLabelsMethod;
+      imagedetect.ImageObjects> getGetObjectsMethod;
 
   @io.grpc.stub.annotations.RpcMethod(
-      fullMethodName = SERVICE_NAME + '/' + "getLabels",
+      fullMethodName = SERVICE_NAME + '/' + "getObjects",
       requestType = imagedetect.ImageId.class,
       responseType = imagedetect.ImageObjects.class,
       methodType = io.grpc.MethodDescriptor.MethodType.UNARY)
   public static io.grpc.MethodDescriptor<imagedetect.ImageId,
-      imagedetect.ImageObjects> getGetLabelsMethod() {
-    io.grpc.MethodDescriptor<imagedetect.ImageId, imagedetect.ImageObjects> getGetLabelsMethod;
-    if ((getGetLabelsMethod = imageContractGrpc.getGetLabelsMethod) == null) {
+      imagedetect.ImageObjects> getGetObjectsMethod() {
+    io.grpc.MethodDescriptor<imagedetect.ImageId, imagedetect.ImageObjects> getGetObjectsMethod;
+    if ((getGetObjectsMethod = imageContractGrpc.getGetObjectsMethod) == null) {
       synchronized (imageContractGrpc.class) {
-        if ((getGetLabelsMethod = imageContractGrpc.getGetLabelsMethod) == null) {
-          imageContractGrpc.getGetLabelsMethod = getGetLabelsMethod =
+        if ((getGetObjectsMethod = imageContractGrpc.getGetObjectsMethod) == null) {
+          imageContractGrpc.getGetObjectsMethod = getGetObjectsMethod =
               io.grpc.MethodDescriptor.<imagedetect.ImageId, imagedetect.ImageObjects>newBuilder()
               .setType(io.grpc.MethodDescriptor.MethodType.UNARY)
-              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "getLabels"))
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "getObjects"))
               .setSampledToLocalTracing(true)
               .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   imagedetect.ImageId.getDefaultInstance()))
               .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
                   imagedetect.ImageObjects.getDefaultInstance()))
-              .setSchemaDescriptor(new imageContractMethodDescriptorSupplier("getLabels"))
+              .setSchemaDescriptor(new imageContractMethodDescriptorSupplier("getObjects"))
               .build();
         }
       }
     }
-    return getGetLabelsMethod;
+    return getGetObjectsMethod;
   }
 
   private static volatile io.grpc.MethodDescriptor<imagedetect.RequestObjectDate,
@@ -118,6 +118,37 @@ public final class imageContractGrpc {
       }
     }
     return getGetImagesMethod;
+  }
+
+  private static volatile io.grpc.MethodDescriptor<imagedetect.ImageId,
+      imagedetect.Image> getDownloadImageMethod;
+
+  @io.grpc.stub.annotations.RpcMethod(
+      fullMethodName = SERVICE_NAME + '/' + "downloadImage",
+      requestType = imagedetect.ImageId.class,
+      responseType = imagedetect.Image.class,
+      methodType = io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+  public static io.grpc.MethodDescriptor<imagedetect.ImageId,
+      imagedetect.Image> getDownloadImageMethod() {
+    io.grpc.MethodDescriptor<imagedetect.ImageId, imagedetect.Image> getDownloadImageMethod;
+    if ((getDownloadImageMethod = imageContractGrpc.getDownloadImageMethod) == null) {
+      synchronized (imageContractGrpc.class) {
+        if ((getDownloadImageMethod = imageContractGrpc.getDownloadImageMethod) == null) {
+          imageContractGrpc.getDownloadImageMethod = getDownloadImageMethod =
+              io.grpc.MethodDescriptor.<imagedetect.ImageId, imagedetect.Image>newBuilder()
+              .setType(io.grpc.MethodDescriptor.MethodType.SERVER_STREAMING)
+              .setFullMethodName(generateFullMethodName(SERVICE_NAME, "downloadImage"))
+              .setSampledToLocalTracing(true)
+              .setRequestMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  imagedetect.ImageId.getDefaultInstance()))
+              .setResponseMarshaller(io.grpc.protobuf.ProtoUtils.marshaller(
+                  imagedetect.Image.getDefaultInstance()))
+              .setSchemaDescriptor(new imageContractMethodDescriptorSupplier("downloadImage"))
+              .build();
+        }
+      }
+    }
+    return getDownloadImageMethod;
   }
 
   /**
@@ -177,9 +208,9 @@ public final class imageContractGrpc {
 
     /**
      */
-    public void getLabels(imagedetect.ImageId request,
+    public void getObjects(imagedetect.ImageId request,
         io.grpc.stub.StreamObserver<imagedetect.ImageObjects> responseObserver) {
-      asyncUnimplementedUnaryCall(getGetLabelsMethod(), responseObserver);
+      asyncUnimplementedUnaryCall(getGetObjectsMethod(), responseObserver);
     }
 
     /**
@@ -187,6 +218,13 @@ public final class imageContractGrpc {
     public void getImages(imagedetect.RequestObjectDate request,
         io.grpc.stub.StreamObserver<imagedetect.ImageIds> responseObserver) {
       asyncUnimplementedUnaryCall(getGetImagesMethod(), responseObserver);
+    }
+
+    /**
+     */
+    public void downloadImage(imagedetect.ImageId request,
+        io.grpc.stub.StreamObserver<imagedetect.Image> responseObserver) {
+      asyncUnimplementedUnaryCall(getDownloadImageMethod(), responseObserver);
     }
 
     @java.lang.Override public final io.grpc.ServerServiceDefinition bindService() {
@@ -199,12 +237,12 @@ public final class imageContractGrpc {
                 imagedetect.ImageId>(
                   this, METHODID_UPLOAD_IMAGE)))
           .addMethod(
-            getGetLabelsMethod(),
+            getGetObjectsMethod(),
             asyncUnaryCall(
               new MethodHandlers<
                 imagedetect.ImageId,
                 imagedetect.ImageObjects>(
-                  this, METHODID_GET_LABELS)))
+                  this, METHODID_GET_OBJECTS)))
           .addMethod(
             getGetImagesMethod(),
             asyncUnaryCall(
@@ -212,6 +250,13 @@ public final class imageContractGrpc {
                 imagedetect.RequestObjectDate,
                 imagedetect.ImageIds>(
                   this, METHODID_GET_IMAGES)))
+          .addMethod(
+            getDownloadImageMethod(),
+            asyncServerStreamingCall(
+              new MethodHandlers<
+                imagedetect.ImageId,
+                imagedetect.Image>(
+                  this, METHODID_DOWNLOAD_IMAGE)))
           .build();
     }
   }
@@ -240,10 +285,10 @@ public final class imageContractGrpc {
 
     /**
      */
-    public void getLabels(imagedetect.ImageId request,
+    public void getObjects(imagedetect.ImageId request,
         io.grpc.stub.StreamObserver<imagedetect.ImageObjects> responseObserver) {
       asyncUnaryCall(
-          getChannel().newCall(getGetLabelsMethod(), getCallOptions()), request, responseObserver);
+          getChannel().newCall(getGetObjectsMethod(), getCallOptions()), request, responseObserver);
     }
 
     /**
@@ -252,6 +297,14 @@ public final class imageContractGrpc {
         io.grpc.stub.StreamObserver<imagedetect.ImageIds> responseObserver) {
       asyncUnaryCall(
           getChannel().newCall(getGetImagesMethod(), getCallOptions()), request, responseObserver);
+    }
+
+    /**
+     */
+    public void downloadImage(imagedetect.ImageId request,
+        io.grpc.stub.StreamObserver<imagedetect.Image> responseObserver) {
+      asyncServerStreamingCall(
+          getChannel().newCall(getDownloadImageMethod(), getCallOptions()), request, responseObserver);
     }
   }
 
@@ -271,9 +324,9 @@ public final class imageContractGrpc {
 
     /**
      */
-    public imagedetect.ImageObjects getLabels(imagedetect.ImageId request) {
+    public imagedetect.ImageObjects getObjects(imagedetect.ImageId request) {
       return blockingUnaryCall(
-          getChannel(), getGetLabelsMethod(), getCallOptions(), request);
+          getChannel(), getGetObjectsMethod(), getCallOptions(), request);
     }
 
     /**
@@ -281,6 +334,14 @@ public final class imageContractGrpc {
     public imagedetect.ImageIds getImages(imagedetect.RequestObjectDate request) {
       return blockingUnaryCall(
           getChannel(), getGetImagesMethod(), getCallOptions(), request);
+    }
+
+    /**
+     */
+    public java.util.Iterator<imagedetect.Image> downloadImage(
+        imagedetect.ImageId request) {
+      return blockingServerStreamingCall(
+          getChannel(), getDownloadImageMethod(), getCallOptions(), request);
     }
   }
 
@@ -300,10 +361,10 @@ public final class imageContractGrpc {
 
     /**
      */
-    public com.google.common.util.concurrent.ListenableFuture<imagedetect.ImageObjects> getLabels(
+    public com.google.common.util.concurrent.ListenableFuture<imagedetect.ImageObjects> getObjects(
         imagedetect.ImageId request) {
       return futureUnaryCall(
-          getChannel().newCall(getGetLabelsMethod(), getCallOptions()), request);
+          getChannel().newCall(getGetObjectsMethod(), getCallOptions()), request);
     }
 
     /**
@@ -315,9 +376,10 @@ public final class imageContractGrpc {
     }
   }
 
-  private static final int METHODID_GET_LABELS = 0;
+  private static final int METHODID_GET_OBJECTS = 0;
   private static final int METHODID_GET_IMAGES = 1;
-  private static final int METHODID_UPLOAD_IMAGE = 2;
+  private static final int METHODID_DOWNLOAD_IMAGE = 2;
+  private static final int METHODID_UPLOAD_IMAGE = 3;
 
   private static final class MethodHandlers<Req, Resp> implements
       io.grpc.stub.ServerCalls.UnaryMethod<Req, Resp>,
@@ -336,13 +398,17 @@ public final class imageContractGrpc {
     @java.lang.SuppressWarnings("unchecked")
     public void invoke(Req request, io.grpc.stub.StreamObserver<Resp> responseObserver) {
       switch (methodId) {
-        case METHODID_GET_LABELS:
-          serviceImpl.getLabels((imagedetect.ImageId) request,
+        case METHODID_GET_OBJECTS:
+          serviceImpl.getObjects((imagedetect.ImageId) request,
               (io.grpc.stub.StreamObserver<imagedetect.ImageObjects>) responseObserver);
           break;
         case METHODID_GET_IMAGES:
           serviceImpl.getImages((imagedetect.RequestObjectDate) request,
               (io.grpc.stub.StreamObserver<imagedetect.ImageIds>) responseObserver);
+          break;
+        case METHODID_DOWNLOAD_IMAGE:
+          serviceImpl.downloadImage((imagedetect.ImageId) request,
+              (io.grpc.stub.StreamObserver<imagedetect.Image>) responseObserver);
           break;
         default:
           throw new AssertionError();
@@ -409,8 +475,9 @@ public final class imageContractGrpc {
           serviceDescriptor = result = io.grpc.ServiceDescriptor.newBuilder(SERVICE_NAME)
               .setSchemaDescriptor(new imageContractFileDescriptorSupplier())
               .addMethod(getUploadImageMethod())
-              .addMethod(getGetLabelsMethod())
+              .addMethod(getGetObjectsMethod())
               .addMethod(getGetImagesMethod())
+              .addMethod(getDownloadImageMethod())
               .build();
         }
       }

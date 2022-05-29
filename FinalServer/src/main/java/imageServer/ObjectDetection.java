@@ -1,5 +1,8 @@
 package imageServer;
 
+import imagedetect.ImageObjects;
+import imagedetect.Object;
+
 public class ObjectDetection {
     String object;
     float score;
@@ -12,8 +15,8 @@ public class ObjectDetection {
     public ObjectDetection(){}
 
     //GETTERS AND SETTERS
-    public String getObject() {
-        return object;
+    public Object getObject() {
+        return Object.newBuilder().setObject(object).setScore(score).build();
     }
 
     public float getScore() {

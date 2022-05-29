@@ -16,7 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private ImageObjects() {
-    objects_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    objects_ = java.util.Collections.emptyList();
   }
 
   @java.lang.Override
@@ -51,12 +51,12 @@ private static final long serialVersionUID = 0L;
             done = true;
             break;
           case 10: {
-            java.lang.String s = input.readStringRequireUtf8();
             if (!((mutable_bitField0_ & 0x00000001) != 0)) {
-              objects_ = new com.google.protobuf.LazyStringArrayList();
+              objects_ = new java.util.ArrayList<imagedetect.Object>();
               mutable_bitField0_ |= 0x00000001;
             }
-            objects_.add(s);
+            objects_.add(
+                input.readMessage(imagedetect.Object.parser(), extensionRegistry));
             break;
           }
           default: {
@@ -75,7 +75,7 @@ private static final long serialVersionUID = 0L;
           e).setUnfinishedMessage(this);
     } finally {
       if (((mutable_bitField0_ & 0x00000001) != 0)) {
-        objects_ = objects_.getUnmodifiableView();
+        objects_ = java.util.Collections.unmodifiableList(objects_);
       }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
@@ -95,38 +95,38 @@ private static final long serialVersionUID = 0L;
   }
 
   public static final int OBJECTS_FIELD_NUMBER = 1;
-  private com.google.protobuf.LazyStringList objects_;
+  private java.util.List<imagedetect.Object> objects_;
   /**
-   * <code>repeated string objects = 1;</code>
-   * @return A list containing the objects.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
-  public com.google.protobuf.ProtocolStringList
-      getObjectsList() {
+  public java.util.List<imagedetect.Object> getObjectsList() {
     return objects_;
   }
   /**
-   * <code>repeated string objects = 1;</code>
-   * @return The count of objects.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
+   */
+  public java.util.List<? extends imagedetect.ObjectOrBuilder> 
+      getObjectsOrBuilderList() {
+    return objects_;
+  }
+  /**
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
   public int getObjectsCount() {
     return objects_.size();
   }
   /**
-   * <code>repeated string objects = 1;</code>
-   * @param index The index of the element to return.
-   * @return The objects at the given index.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
-  public java.lang.String getObjects(int index) {
+  public imagedetect.Object getObjects(int index) {
     return objects_.get(index);
   }
   /**
-   * <code>repeated string objects = 1;</code>
-   * @param index The index of the value to return.
-   * @return The bytes of the objects at the given index.
+   * <code>repeated .imagesservice.Object objects = 1;</code>
    */
-  public com.google.protobuf.ByteString
-      getObjectsBytes(int index) {
-    return objects_.getByteString(index);
+  public imagedetect.ObjectOrBuilder getObjectsOrBuilder(
+      int index) {
+    return objects_.get(index);
   }
 
   private byte memoizedIsInitialized = -1;
@@ -144,7 +144,7 @@ private static final long serialVersionUID = 0L;
   public void writeTo(com.google.protobuf.CodedOutputStream output)
                       throws java.io.IOException {
     for (int i = 0; i < objects_.size(); i++) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 1, objects_.getRaw(i));
+      output.writeMessage(1, objects_.get(i));
     }
     unknownFields.writeTo(output);
   }
@@ -155,13 +155,9 @@ private static final long serialVersionUID = 0L;
     if (size != -1) return size;
 
     size = 0;
-    {
-      int dataSize = 0;
-      for (int i = 0; i < objects_.size(); i++) {
-        dataSize += computeStringSizeNoTag(objects_.getRaw(i));
-      }
-      size += dataSize;
-      size += 1 * getObjectsList().size();
+    for (int i = 0; i < objects_.size(); i++) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeMessageSize(1, objects_.get(i));
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -323,13 +319,18 @@ private static final long serialVersionUID = 0L;
     private void maybeForceBuilderInitialization() {
       if (com.google.protobuf.GeneratedMessageV3
               .alwaysUseFieldBuilders) {
+        getObjectsFieldBuilder();
       }
     }
     @java.lang.Override
     public Builder clear() {
       super.clear();
-      objects_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
+      if (objectsBuilder_ == null) {
+        objects_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+      } else {
+        objectsBuilder_.clear();
+      }
       return this;
     }
 
@@ -357,11 +358,15 @@ private static final long serialVersionUID = 0L;
     public imagedetect.ImageObjects buildPartial() {
       imagedetect.ImageObjects result = new imagedetect.ImageObjects(this);
       int from_bitField0_ = bitField0_;
-      if (((bitField0_ & 0x00000001) != 0)) {
-        objects_ = objects_.getUnmodifiableView();
-        bitField0_ = (bitField0_ & ~0x00000001);
+      if (objectsBuilder_ == null) {
+        if (((bitField0_ & 0x00000001) != 0)) {
+          objects_ = java.util.Collections.unmodifiableList(objects_);
+          bitField0_ = (bitField0_ & ~0x00000001);
+        }
+        result.objects_ = objects_;
+      } else {
+        result.objects_ = objectsBuilder_.build();
       }
-      result.objects_ = objects_;
       onBuilt();
       return result;
     }
@@ -410,15 +415,31 @@ private static final long serialVersionUID = 0L;
 
     public Builder mergeFrom(imagedetect.ImageObjects other) {
       if (other == imagedetect.ImageObjects.getDefaultInstance()) return this;
-      if (!other.objects_.isEmpty()) {
-        if (objects_.isEmpty()) {
-          objects_ = other.objects_;
-          bitField0_ = (bitField0_ & ~0x00000001);
-        } else {
-          ensureObjectsIsMutable();
-          objects_.addAll(other.objects_);
+      if (objectsBuilder_ == null) {
+        if (!other.objects_.isEmpty()) {
+          if (objects_.isEmpty()) {
+            objects_ = other.objects_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+          } else {
+            ensureObjectsIsMutable();
+            objects_.addAll(other.objects_);
+          }
+          onChanged();
         }
-        onChanged();
+      } else {
+        if (!other.objects_.isEmpty()) {
+          if (objectsBuilder_.isEmpty()) {
+            objectsBuilder_.dispose();
+            objectsBuilder_ = null;
+            objects_ = other.objects_;
+            bitField0_ = (bitField0_ & ~0x00000001);
+            objectsBuilder_ = 
+              com.google.protobuf.GeneratedMessageV3.alwaysUseFieldBuilders ?
+                 getObjectsFieldBuilder() : null;
+          } else {
+            objectsBuilder_.addAllMessages(other.objects_);
+          }
+        }
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -450,114 +471,244 @@ private static final long serialVersionUID = 0L;
     }
     private int bitField0_;
 
-    private com.google.protobuf.LazyStringList objects_ = com.google.protobuf.LazyStringArrayList.EMPTY;
+    private java.util.List<imagedetect.Object> objects_ =
+      java.util.Collections.emptyList();
     private void ensureObjectsIsMutable() {
       if (!((bitField0_ & 0x00000001) != 0)) {
-        objects_ = new com.google.protobuf.LazyStringArrayList(objects_);
+        objects_ = new java.util.ArrayList<imagedetect.Object>(objects_);
         bitField0_ |= 0x00000001;
        }
     }
+
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        imagedetect.Object, imagedetect.Object.Builder, imagedetect.ObjectOrBuilder> objectsBuilder_;
+
     /**
-     * <code>repeated string objects = 1;</code>
-     * @return A list containing the objects.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
-    public com.google.protobuf.ProtocolStringList
-        getObjectsList() {
-      return objects_.getUnmodifiableView();
+    public java.util.List<imagedetect.Object> getObjectsList() {
+      if (objectsBuilder_ == null) {
+        return java.util.Collections.unmodifiableList(objects_);
+      } else {
+        return objectsBuilder_.getMessageList();
+      }
     }
     /**
-     * <code>repeated string objects = 1;</code>
-     * @return The count of objects.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
     public int getObjectsCount() {
-      return objects_.size();
+      if (objectsBuilder_ == null) {
+        return objects_.size();
+      } else {
+        return objectsBuilder_.getCount();
+      }
     }
     /**
-     * <code>repeated string objects = 1;</code>
-     * @param index The index of the element to return.
-     * @return The objects at the given index.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
-    public java.lang.String getObjects(int index) {
-      return objects_.get(index);
+    public imagedetect.Object getObjects(int index) {
+      if (objectsBuilder_ == null) {
+        return objects_.get(index);
+      } else {
+        return objectsBuilder_.getMessage(index);
+      }
     }
     /**
-     * <code>repeated string objects = 1;</code>
-     * @param index The index of the value to return.
-     * @return The bytes of the objects at the given index.
-     */
-    public com.google.protobuf.ByteString
-        getObjectsBytes(int index) {
-      return objects_.getByteString(index);
-    }
-    /**
-     * <code>repeated string objects = 1;</code>
-     * @param index The index to set the value at.
-     * @param value The objects to set.
-     * @return This builder for chaining.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
     public Builder setObjects(
-        int index, java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureObjectsIsMutable();
-      objects_.set(index, value);
-      onChanged();
+        int index, imagedetect.Object value) {
+      if (objectsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureObjectsIsMutable();
+        objects_.set(index, value);
+        onChanged();
+      } else {
+        objectsBuilder_.setMessage(index, value);
+      }
       return this;
     }
     /**
-     * <code>repeated string objects = 1;</code>
-     * @param value The objects to add.
-     * @return This builder for chaining.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public Builder setObjects(
+        int index, imagedetect.Object.Builder builderForValue) {
+      if (objectsBuilder_ == null) {
+        ensureObjectsIsMutable();
+        objects_.set(index, builderForValue.build());
+        onChanged();
+      } else {
+        objectsBuilder_.setMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public Builder addObjects(imagedetect.Object value) {
+      if (objectsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureObjectsIsMutable();
+        objects_.add(value);
+        onChanged();
+      } else {
+        objectsBuilder_.addMessage(value);
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
     public Builder addObjects(
-        java.lang.String value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  ensureObjectsIsMutable();
-      objects_.add(value);
-      onChanged();
+        int index, imagedetect.Object value) {
+      if (objectsBuilder_ == null) {
+        if (value == null) {
+          throw new NullPointerException();
+        }
+        ensureObjectsIsMutable();
+        objects_.add(index, value);
+        onChanged();
+      } else {
+        objectsBuilder_.addMessage(index, value);
+      }
       return this;
     }
     /**
-     * <code>repeated string objects = 1;</code>
-     * @param values The objects to add.
-     * @return This builder for chaining.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public Builder addObjects(
+        imagedetect.Object.Builder builderForValue) {
+      if (objectsBuilder_ == null) {
+        ensureObjectsIsMutable();
+        objects_.add(builderForValue.build());
+        onChanged();
+      } else {
+        objectsBuilder_.addMessage(builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public Builder addObjects(
+        int index, imagedetect.Object.Builder builderForValue) {
+      if (objectsBuilder_ == null) {
+        ensureObjectsIsMutable();
+        objects_.add(index, builderForValue.build());
+        onChanged();
+      } else {
+        objectsBuilder_.addMessage(index, builderForValue.build());
+      }
+      return this;
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
     public Builder addAllObjects(
-        java.lang.Iterable<java.lang.String> values) {
-      ensureObjectsIsMutable();
-      com.google.protobuf.AbstractMessageLite.Builder.addAll(
-          values, objects_);
-      onChanged();
+        java.lang.Iterable<? extends imagedetect.Object> values) {
+      if (objectsBuilder_ == null) {
+        ensureObjectsIsMutable();
+        com.google.protobuf.AbstractMessageLite.Builder.addAll(
+            values, objects_);
+        onChanged();
+      } else {
+        objectsBuilder_.addAllMessages(values);
+      }
       return this;
     }
     /**
-     * <code>repeated string objects = 1;</code>
-     * @return This builder for chaining.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
     public Builder clearObjects() {
-      objects_ = com.google.protobuf.LazyStringArrayList.EMPTY;
-      bitField0_ = (bitField0_ & ~0x00000001);
-      onChanged();
+      if (objectsBuilder_ == null) {
+        objects_ = java.util.Collections.emptyList();
+        bitField0_ = (bitField0_ & ~0x00000001);
+        onChanged();
+      } else {
+        objectsBuilder_.clear();
+      }
       return this;
     }
     /**
-     * <code>repeated string objects = 1;</code>
-     * @param value The bytes of the objects to add.
-     * @return This builder for chaining.
+     * <code>repeated .imagesservice.Object objects = 1;</code>
      */
-    public Builder addObjectsBytes(
-        com.google.protobuf.ByteString value) {
-      if (value == null) {
-    throw new NullPointerException();
-  }
-  checkByteStringIsUtf8(value);
-      ensureObjectsIsMutable();
-      objects_.add(value);
-      onChanged();
+    public Builder removeObjects(int index) {
+      if (objectsBuilder_ == null) {
+        ensureObjectsIsMutable();
+        objects_.remove(index);
+        onChanged();
+      } else {
+        objectsBuilder_.remove(index);
+      }
       return this;
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public imagedetect.Object.Builder getObjectsBuilder(
+        int index) {
+      return getObjectsFieldBuilder().getBuilder(index);
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public imagedetect.ObjectOrBuilder getObjectsOrBuilder(
+        int index) {
+      if (objectsBuilder_ == null) {
+        return objects_.get(index);  } else {
+        return objectsBuilder_.getMessageOrBuilder(index);
+      }
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public java.util.List<? extends imagedetect.ObjectOrBuilder> 
+         getObjectsOrBuilderList() {
+      if (objectsBuilder_ != null) {
+        return objectsBuilder_.getMessageOrBuilderList();
+      } else {
+        return java.util.Collections.unmodifiableList(objects_);
+      }
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public imagedetect.Object.Builder addObjectsBuilder() {
+      return getObjectsFieldBuilder().addBuilder(
+          imagedetect.Object.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public imagedetect.Object.Builder addObjectsBuilder(
+        int index) {
+      return getObjectsFieldBuilder().addBuilder(
+          index, imagedetect.Object.getDefaultInstance());
+    }
+    /**
+     * <code>repeated .imagesservice.Object objects = 1;</code>
+     */
+    public java.util.List<imagedetect.Object.Builder> 
+         getObjectsBuilderList() {
+      return getObjectsFieldBuilder().getBuilderList();
+    }
+    private com.google.protobuf.RepeatedFieldBuilderV3<
+        imagedetect.Object, imagedetect.Object.Builder, imagedetect.ObjectOrBuilder> 
+        getObjectsFieldBuilder() {
+      if (objectsBuilder_ == null) {
+        objectsBuilder_ = new com.google.protobuf.RepeatedFieldBuilderV3<
+            imagedetect.Object, imagedetect.Object.Builder, imagedetect.ObjectOrBuilder>(
+                objects_,
+                ((bitField0_ & 0x00000001) != 0),
+                getParentForChildren(),
+                isClean());
+        objects_ = null;
+      }
+      return objectsBuilder_;
     }
     @java.lang.Override
     public final Builder setUnknownFields(

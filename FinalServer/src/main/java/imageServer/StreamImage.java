@@ -81,7 +81,7 @@ public class StreamImage implements StreamObserver<Image> {
         if (writer == null)
             throw new RuntimeException("Something went wrong.");
 
-        String id = BUCKET_ID + "-" + filename;
+        String id = filename;
         ImageId result = ImageId
                 .newBuilder()
                 .setId(id)

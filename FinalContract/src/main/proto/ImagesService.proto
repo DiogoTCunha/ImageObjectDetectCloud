@@ -8,8 +8,9 @@ package imagesservice; // package do proto
 
 service imageContract {
   rpc uploadImage(stream Image) returns (ImageId);
-  rpc getLabels(ImageId) returns (ImageObjects);
+  rpc getObjects(ImageId) returns (ImageObjects);
   rpc getImages(RequestObjectDate) returns (ImageIds);
+  rpc downloadImage(ImageId) returns (stream Image);
 }
 
 message Image {
@@ -23,7 +24,12 @@ message ImageId {
 }
 
 message ImageObjects {
-  repeated string objects = 1;
+  repeated Object objects = 1;
+}
+
+message Object {
+  string object = 1;
+  float score = 2;
 }
 
 message RequestObjectDate {

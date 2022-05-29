@@ -83,9 +83,8 @@ public class Server extends imageContractGrpc.imageContractImplBase {
         return new StreamImage(responseObserver);
     }
 
-    //TODO: RENAME TO GET OBJECTS
     @Override
-    public void getLabels(ImageId request, StreamObserver<ImageObjects> responseObserver) {
+    public void getObjects(ImageId request, StreamObserver<ImageObjects> responseObserver) {
         DocumentReference docRef = firestore.collection(FIRESTORE_COLLECTION).document(request.getId());
         ApiFuture<DocumentSnapshot> future= docRef.get();
         ObjectDetectionResult result;
@@ -96,15 +95,15 @@ public class Server extends imageContractGrpc.imageContractImplBase {
 
                 result = doc.toObject(ObjectDetectionResult.class);
 
+                // TODO: If objects in firestore is null
                 List<ObjectDetection> objects = result.getObjects();
-                ImageObjects.Builder builder = ImageObjects.newBuilder();
 
-                //TODO: Add score
+                ImageObjects.Builder builder = ImageObjects.newBuilder();
                 for (ObjectDetection object: objects) {
                     builder.addObjects(object.getObject());
                 }
-
                 responseObserver.onNext(builder.build());
+
                 responseObserver.onCompleted();
             } else {
 

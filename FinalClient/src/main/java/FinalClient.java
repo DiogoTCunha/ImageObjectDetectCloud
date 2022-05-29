@@ -49,10 +49,7 @@ public class FinalClient {
             System.out.println("Client Started with IP: " + svcIP + " and Port: " + svcPort);
 
             while(true) {
-                showOptions();
-                int option = in.nextInt();
-                in.nextLine();
-                switch (option) {
+                switch (getOption()) {
                     case 0:
                         System.exit(0);
                     case 1:
@@ -127,13 +124,16 @@ public class FinalClient {
         throw new Exception("Couldn't get channel, max tries exceeded.");
     }
 
-    public static void showOptions(){
+    public static int getOption(){
         System.out.println("1: Upload Image\n" +
                         "2: Get Images\n" +
                         "3: Get Objects\n" +
                         "4: Download Image\n" +
                         "0: Exit"
         );
+        int option = in.nextInt();
+        in.nextLine();
+        return option;
     }
 
     public static void uploadImage(){
@@ -240,7 +240,7 @@ public class FinalClient {
         ImageObjects imageObjects;
 
         try {
-            imageObjects = blockingStub.getLabels(imageId); //TODO: Rename method
+            imageObjects = blockingStub.getObjects(imageId);
         } catch (Exception e) {
             System.out.println(e.getMessage());
             return;

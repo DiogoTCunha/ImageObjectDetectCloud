@@ -7,6 +7,7 @@ imagedetect\ImageObjects$Builder.class
 imagedetect\imageContractGrpc$imageContractMethodDescriptorSupplier.class
 imagedetect\ImageObjects$1.class
 imagedetect\ImageId$1.class
+imagedetect\ObjectOrBuilder.class
 imagedetect\Image.class
 imagedetect\imageContractGrpc$3.class
 imagedetect\ImageIds$Builder.class
@@ -19,15 +20,18 @@ imagedetect\ImageIdOrBuilder.class
 imagedetect\ImageIds$1.class
 imagedetect\imageContractGrpc.class
 imagedetect\Image$1.class
+imagedetect\Object$Builder.class
 imagedetect\imageContractGrpc$2.class
 imagedetect\imageContractGrpc$imageContractImplBase.class
 imagedetect\ImagesService.class
+imagedetect\Object.class
 imagedetect\imageContractGrpc$imageContractBaseDescriptorSupplier.class
 imagedetect\imageContractGrpc$imageContractStub.class
 imagedetect\ImageId$Builder.class
 imagedetect\RequestObjectDate$1.class
 imagedetect\RequestObjectDate.class
 imagedetect\RequestObjectDateOrBuilder.class
+imagedetect\Object$1.class
 imagedetect\ImageObjects.class
 imagedetect\Image$Builder.class
 imagedetect\imageContractGrpc$imageContractFutureStub.class
