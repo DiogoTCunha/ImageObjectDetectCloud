@@ -1,4 +1,3 @@
-import com.google.api.Http;
 import com.google.protobuf.ByteString;
 import imagedetect.Image;
 import imagedetect.ImageId;
@@ -22,7 +21,6 @@ import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
@@ -62,7 +60,8 @@ public class FinalClient {
                         getObjects();
                         break;
                     case 4:
-                        //downloadImage();
+                        downloadImage();
+                        break;
                     default:
                         System.out.println("Not a valid operation");
                 }
@@ -150,7 +149,7 @@ public class FinalClient {
         Path uploadFrom = Paths.get(absFileName);
         String fileName = uploadFrom.getFileName().toString();
 
-        StreamObserver<Image> streamObserver = noBlockingStub.uploadImage(new RequestStreamObserver());
+        StreamObserver<Image> streamObserver = noBlockingStub.uploadImage(new ImageIdStreamObserver());
 
         try (InputStream input = Files.newInputStream(uploadFrom)) {
             byte[] buffer = new byte[1024];
@@ -173,7 +172,7 @@ public class FinalClient {
         }
     }
 
-    private static void getImages() {
+    public static void getImages() {
 
         RequestObjectDate request = getRequestObject();
         ImageIds images;
@@ -194,6 +193,28 @@ public class FinalClient {
                 System.out.println(images.getIds(i));
         }
     }
+
+    public static void downloadImage(){
+
+        /*
+        System.out.println("Insert the id");
+        String id = in.nextLine();
+
+        System.out.println("Insert the download path");
+        String path = in.nextLine();
+        */
+
+        String id = "2022-05-29T18:08:31.833000000Ztest.jpg";
+        String path = "A:\\Dropbox\\CN22\\";
+
+        ImageId imageId = ImageId
+                .newBuilder()
+                .setId(id)
+                .build();
+
+        noBlockingStub.downloadImage(imageId, new ImageStreamObserver(path));
+    }
+
 
     private static RequestObjectDate getRequestObject(){
 

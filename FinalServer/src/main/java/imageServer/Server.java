@@ -81,6 +81,31 @@ public class Server extends imageContractGrpc.imageContractImplBase {
     }
 
     @Override
+    public void downloadImage(ImageId imageId, StreamObserver<Image> responseObserver){
+        BlobId blobId = BlobId.of(BUCKET_ID, "annotated-" + imageId.getId());
+        Blob blob = storage.get(blobId);
+
+        try (ReadChannel reader = blob.reader()) {
+            ByteBuffer buffer = ByteBuffer.allocate(1024);
+            while ((reader.read(buffer)) > 0) {
+
+                buffer.flip();
+                ByteString bytes = ByteString.copyFrom(buffer);
+                Image image = Image.newBuilder()
+                        .setFilename(imageId.getId())
+                        .setFileExtension(".jpg") //TODO: Maybe remove extension?
+                        .setImageBlockBytes(bytes).build();
+                responseObserver.onNext(image);
+                buffer.clear();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        responseObserver.onCompleted();
+    }
+
+    @Override
     public void getObjects(ImageId request, StreamObserver<ImageObjects> responseObserver) {
         DocumentReference docRef = firestore.collection(FIRESTORE_COLLECTION).document(request.getId());
         ApiFuture<DocumentSnapshot> future = docRef.get();

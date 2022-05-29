@@ -1,7 +1,7 @@
 import imagedetect.ImageId;
 import io.grpc.stub.StreamObserver;
 
-public class RequestStreamObserver implements StreamObserver<ImageId> {
+public class ImageIdStreamObserver implements StreamObserver<ImageId> {
 
     private ImageId imageId = null;
     @Override
