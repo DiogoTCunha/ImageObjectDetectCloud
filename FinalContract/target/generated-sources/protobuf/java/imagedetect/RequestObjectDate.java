@@ -57,21 +57,21 @@ private static final long serialVersionUID = 0L;
             object_ = s;
             break;
           }
-          case 18: {
-            java.lang.String s = input.readStringRequireUtf8();
+          case 21: {
 
-            initialDate_ = s;
+            score_ = input.readFloat();
             break;
           }
           case 26: {
             java.lang.String s = input.readStringRequireUtf8();
 
-            endDate_ = s;
+            initialDate_ = s;
             break;
           }
-          case 33: {
+          case 34: {
+            java.lang.String s = input.readStringRequireUtf8();
 
-            certainty_ = input.readDouble();
+            endDate_ = s;
             break;
           }
           default: {
@@ -142,10 +142,20 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int INITIALDATE_FIELD_NUMBER = 2;
+  public static final int SCORE_FIELD_NUMBER = 2;
+  private float score_;
+  /**
+   * <code>float score = 2;</code>
+   * @return The score.
+   */
+  public float getScore() {
+    return score_;
+  }
+
+  public static final int INITIALDATE_FIELD_NUMBER = 3;
   private volatile java.lang.Object initialDate_;
   /**
-   * <code>string initialDate = 2;</code>
+   * <code>string initialDate = 3;</code>
    * @return The initialDate.
    */
   public java.lang.String getInitialDate() {
@@ -161,7 +171,7 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>string initialDate = 2;</code>
+   * <code>string initialDate = 3;</code>
    * @return The bytes for initialDate.
    */
   public com.google.protobuf.ByteString
@@ -178,10 +188,10 @@ private static final long serialVersionUID = 0L;
     }
   }
 
-  public static final int ENDDATE_FIELD_NUMBER = 3;
+  public static final int ENDDATE_FIELD_NUMBER = 4;
   private volatile java.lang.Object endDate_;
   /**
-   * <code>string endDate = 3;</code>
+   * <code>string endDate = 4;</code>
    * @return The endDate.
    */
   public java.lang.String getEndDate() {
@@ -197,7 +207,7 @@ private static final long serialVersionUID = 0L;
     }
   }
   /**
-   * <code>string endDate = 3;</code>
+   * <code>string endDate = 4;</code>
    * @return The bytes for endDate.
    */
   public com.google.protobuf.ByteString
@@ -212,16 +222,6 @@ private static final long serialVersionUID = 0L;
     } else {
       return (com.google.protobuf.ByteString) ref;
     }
-  }
-
-  public static final int CERTAINTY_FIELD_NUMBER = 4;
-  private double certainty_;
-  /**
-   * <code>double certainty = 4;</code>
-   * @return The certainty.
-   */
-  public double getCertainty() {
-    return certainty_;
   }
 
   private byte memoizedIsInitialized = -1;
@@ -241,14 +241,14 @@ private static final long serialVersionUID = 0L;
     if (!getObjectBytes().isEmpty()) {
       com.google.protobuf.GeneratedMessageV3.writeString(output, 1, object_);
     }
+    if (score_ != 0F) {
+      output.writeFloat(2, score_);
+    }
     if (!getInitialDateBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 2, initialDate_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, initialDate_);
     }
     if (!getEndDateBytes().isEmpty()) {
-      com.google.protobuf.GeneratedMessageV3.writeString(output, 3, endDate_);
-    }
-    if (certainty_ != 0D) {
-      output.writeDouble(4, certainty_);
+      com.google.protobuf.GeneratedMessageV3.writeString(output, 4, endDate_);
     }
     unknownFields.writeTo(output);
   }
@@ -262,15 +262,15 @@ private static final long serialVersionUID = 0L;
     if (!getObjectBytes().isEmpty()) {
       size += com.google.protobuf.GeneratedMessageV3.computeStringSize(1, object_);
     }
+    if (score_ != 0F) {
+      size += com.google.protobuf.CodedOutputStream
+        .computeFloatSize(2, score_);
+    }
     if (!getInitialDateBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(2, initialDate_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, initialDate_);
     }
     if (!getEndDateBytes().isEmpty()) {
-      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(3, endDate_);
-    }
-    if (certainty_ != 0D) {
-      size += com.google.protobuf.CodedOutputStream
-        .computeDoubleSize(4, certainty_);
+      size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, endDate_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -289,13 +289,13 @@ private static final long serialVersionUID = 0L;
 
     if (!getObject()
         .equals(other.getObject())) return false;
+    if (java.lang.Float.floatToIntBits(getScore())
+        != java.lang.Float.floatToIntBits(
+            other.getScore())) return false;
     if (!getInitialDate()
         .equals(other.getInitialDate())) return false;
     if (!getEndDate()
         .equals(other.getEndDate())) return false;
-    if (java.lang.Double.doubleToLongBits(getCertainty())
-        != java.lang.Double.doubleToLongBits(
-            other.getCertainty())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -309,13 +309,13 @@ private static final long serialVersionUID = 0L;
     hash = (19 * hash) + getDescriptor().hashCode();
     hash = (37 * hash) + OBJECT_FIELD_NUMBER;
     hash = (53 * hash) + getObject().hashCode();
+    hash = (37 * hash) + SCORE_FIELD_NUMBER;
+    hash = (53 * hash) + java.lang.Float.floatToIntBits(
+        getScore());
     hash = (37 * hash) + INITIALDATE_FIELD_NUMBER;
     hash = (53 * hash) + getInitialDate().hashCode();
     hash = (37 * hash) + ENDDATE_FIELD_NUMBER;
     hash = (53 * hash) + getEndDate().hashCode();
-    hash = (37 * hash) + CERTAINTY_FIELD_NUMBER;
-    hash = (53 * hash) + com.google.protobuf.Internal.hashLong(
-        java.lang.Double.doubleToLongBits(getCertainty()));
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
     return hash;
@@ -451,11 +451,11 @@ private static final long serialVersionUID = 0L;
       super.clear();
       object_ = "";
 
+      score_ = 0F;
+
       initialDate_ = "";
 
       endDate_ = "";
-
-      certainty_ = 0D;
 
       return this;
     }
@@ -484,9 +484,9 @@ private static final long serialVersionUID = 0L;
     public imagedetect.RequestObjectDate buildPartial() {
       imagedetect.RequestObjectDate result = new imagedetect.RequestObjectDate(this);
       result.object_ = object_;
+      result.score_ = score_;
       result.initialDate_ = initialDate_;
       result.endDate_ = endDate_;
-      result.certainty_ = certainty_;
       onBuilt();
       return result;
     }
@@ -539,6 +539,9 @@ private static final long serialVersionUID = 0L;
         object_ = other.object_;
         onChanged();
       }
+      if (other.getScore() != 0F) {
+        setScore(other.getScore());
+      }
       if (!other.getInitialDate().isEmpty()) {
         initialDate_ = other.initialDate_;
         onChanged();
@@ -546,9 +549,6 @@ private static final long serialVersionUID = 0L;
       if (!other.getEndDate().isEmpty()) {
         endDate_ = other.endDate_;
         onChanged();
-      }
-      if (other.getCertainty() != 0D) {
-        setCertainty(other.getCertainty());
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -655,9 +655,39 @@ private static final long serialVersionUID = 0L;
       return this;
     }
 
+    private float score_ ;
+    /**
+     * <code>float score = 2;</code>
+     * @return The score.
+     */
+    public float getScore() {
+      return score_;
+    }
+    /**
+     * <code>float score = 2;</code>
+     * @param value The score to set.
+     * @return This builder for chaining.
+     */
+    public Builder setScore(float value) {
+      
+      score_ = value;
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>float score = 2;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearScore() {
+      
+      score_ = 0F;
+      onChanged();
+      return this;
+    }
+
     private java.lang.Object initialDate_ = "";
     /**
-     * <code>string initialDate = 2;</code>
+     * <code>string initialDate = 3;</code>
      * @return The initialDate.
      */
     public java.lang.String getInitialDate() {
@@ -673,7 +703,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string initialDate = 2;</code>
+     * <code>string initialDate = 3;</code>
      * @return The bytes for initialDate.
      */
     public com.google.protobuf.ByteString
@@ -690,7 +720,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string initialDate = 2;</code>
+     * <code>string initialDate = 3;</code>
      * @param value The initialDate to set.
      * @return This builder for chaining.
      */
@@ -705,7 +735,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string initialDate = 2;</code>
+     * <code>string initialDate = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearInitialDate() {
@@ -715,7 +745,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string initialDate = 2;</code>
+     * <code>string initialDate = 3;</code>
      * @param value The bytes for initialDate to set.
      * @return This builder for chaining.
      */
@@ -733,7 +763,7 @@ private static final long serialVersionUID = 0L;
 
     private java.lang.Object endDate_ = "";
     /**
-     * <code>string endDate = 3;</code>
+     * <code>string endDate = 4;</code>
      * @return The endDate.
      */
     public java.lang.String getEndDate() {
@@ -749,7 +779,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string endDate = 3;</code>
+     * <code>string endDate = 4;</code>
      * @return The bytes for endDate.
      */
     public com.google.protobuf.ByteString
@@ -766,7 +796,7 @@ private static final long serialVersionUID = 0L;
       }
     }
     /**
-     * <code>string endDate = 3;</code>
+     * <code>string endDate = 4;</code>
      * @param value The endDate to set.
      * @return This builder for chaining.
      */
@@ -781,7 +811,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string endDate = 3;</code>
+     * <code>string endDate = 4;</code>
      * @return This builder for chaining.
      */
     public Builder clearEndDate() {
@@ -791,7 +821,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>string endDate = 3;</code>
+     * <code>string endDate = 4;</code>
      * @param value The bytes for endDate to set.
      * @return This builder for chaining.
      */
@@ -803,36 +833,6 @@ private static final long serialVersionUID = 0L;
   checkByteStringIsUtf8(value);
       
       endDate_ = value;
-      onChanged();
-      return this;
-    }
-
-    private double certainty_ ;
-    /**
-     * <code>double certainty = 4;</code>
-     * @return The certainty.
-     */
-    public double getCertainty() {
-      return certainty_;
-    }
-    /**
-     * <code>double certainty = 4;</code>
-     * @param value The certainty to set.
-     * @return This builder for chaining.
-     */
-    public Builder setCertainty(double value) {
-      
-      certainty_ = value;
-      onChanged();
-      return this;
-    }
-    /**
-     * <code>double certainty = 4;</code>
-     * @return This builder for chaining.
-     */
-    public Builder clearCertainty() {
-      
-      certainty_ = 0D;
       onChanged();
       return this;
     }

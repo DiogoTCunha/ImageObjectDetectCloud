@@ -175,7 +175,6 @@ public class FinalClient {
 
     private static void getImages() {
 
-        //TODO: Add certainty to request
         RequestObjectDate request = getRequestObject();
         ImageIds images;
 
@@ -198,17 +197,27 @@ public class FinalClient {
 
     private static RequestObjectDate getRequestObject(){
 
+        String object = "1D barcode";
+        float score = 0.7381604313850403f;
+        String initialDate = "2022-05-27";
+        String endDate = "2023-01-01";
+
+        /*
         System.out.println("Insert object name");
         String object = in.nextLine();
 
-        SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
+        System.out.println("Insert score");
+        float score = in.nextFloat();
+        in.nextLine();
 
         System.out.println("Insert initial date");
         String initialDate = in.nextLine();
 
         System.out.println("Insert end date");
         String endDate = in.nextLine();
+        */
 
+        SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
         try {
             format.parse(initialDate);
             format.parse(endDate);
@@ -219,6 +228,7 @@ public class FinalClient {
         return RequestObjectDate
                 .newBuilder()
                 .setObject(object)
+                .setScore(score)
                 .setInitialDate(initialDate)
                 .setEndDate(endDate)
                 .build();

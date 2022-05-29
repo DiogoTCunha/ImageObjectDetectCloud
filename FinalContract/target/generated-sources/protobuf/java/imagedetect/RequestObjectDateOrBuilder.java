@@ -20,32 +20,32 @@ public interface RequestObjectDateOrBuilder extends
       getObjectBytes();
 
   /**
-   * <code>string initialDate = 2;</code>
+   * <code>float score = 2;</code>
+   * @return The score.
+   */
+  float getScore();
+
+  /**
+   * <code>string initialDate = 3;</code>
    * @return The initialDate.
    */
   java.lang.String getInitialDate();
   /**
-   * <code>string initialDate = 2;</code>
+   * <code>string initialDate = 3;</code>
    * @return The bytes for initialDate.
    */
   com.google.protobuf.ByteString
       getInitialDateBytes();
 
   /**
-   * <code>string endDate = 3;</code>
+   * <code>string endDate = 4;</code>
    * @return The endDate.
    */
   java.lang.String getEndDate();
   /**
-   * <code>string endDate = 3;</code>
+   * <code>string endDate = 4;</code>
    * @return The bytes for endDate.
    */
   com.google.protobuf.ByteString
       getEndDateBytes();
-
-  /**
-   * <code>double certainty = 4;</code>
-   * @return The certainty.
-   */
-  double getCertainty();
 }

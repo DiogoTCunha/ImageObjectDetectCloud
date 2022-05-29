@@ -3,11 +3,7 @@ package imageServer;
 import com.google.api.core.ApiFuture;
 import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.ReadChannel;
-import com.google.cloud.firestore.DocumentReference;
-import com.google.cloud.firestore.DocumentSnapshot;
-import com.google.cloud.firestore.Firestore;
-import com.google.cloud.firestore.FirestoreOptions;
-import com.google.cloud.firestore.QuerySnapshot;
+import com.google.cloud.firestore.*;
 import com.google.cloud.pubsub.v1.Publisher;
 import com.google.cloud.storage.Blob;
 import com.google.cloud.storage.BlobId;
@@ -20,6 +16,7 @@ import imagedetect.Image;
 import imagedetect.ImageId;
 import imagedetect.ImageIds;
 import imagedetect.ImageObjects;
+import imagedetect.Object;
 import imagedetect.RequestObjectDate;
 import imagedetect.imageContractGrpc;
 import io.grpc.ServerBuilder;
@@ -86,7 +83,7 @@ public class Server extends imageContractGrpc.imageContractImplBase {
     @Override
     public void getObjects(ImageId request, StreamObserver<ImageObjects> responseObserver) {
         DocumentReference docRef = firestore.collection(FIRESTORE_COLLECTION).document(request.getId());
-        ApiFuture<DocumentSnapshot> future= docRef.get();
+        ApiFuture<DocumentSnapshot> future = docRef.get();
         ObjectDetectionResult result;
 
         try {
@@ -100,7 +97,10 @@ public class Server extends imageContractGrpc.imageContractImplBase {
 
                 ImageObjects.Builder builder = ImageObjects.newBuilder();
                 for (ObjectDetection object: objects) {
-                    builder.addObjects(object.getObject());
+                    builder.addObjects(Object.newBuilder()
+                            .setObject(object.object)
+                            .setScore(object.score)
+                            .build());
                 }
                 responseObserver.onNext(builder.build());
 
@@ -117,6 +117,9 @@ public class Server extends imageContractGrpc.imageContractImplBase {
 
     @Override
     public void getImages(RequestObjectDate request, StreamObserver<ImageIds> responseObserver) {
+
+        String object = request.getObject();
+        float score = request.getScore();
         Date initialDate;
         Date endDate;
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -126,9 +129,34 @@ public class Server extends imageContractGrpc.imageContractImplBase {
             endDate = dateFormat.parse(request.getEndDate());
         } catch (ParseException e) {
             e.printStackTrace();
+            return;
         }
 
-        //TODO: Get images from firestore
+        ImageIds.Builder builder = ImageIds.newBuilder();
+
+        Query query = firestore
+                .collection(FIRESTORE_COLLECTION)
+                .whereGreaterThanOrEqualTo("processingDate", initialDate)
+                .whereLessThanOrEqualTo("processingDate", endDate);
+
+        ApiFuture<QuerySnapshot> querySnapshot = query.get();
+        try {
+            for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
+                ObjectDetectionResult result = doc.toObject(ObjectDetectionResult.class);
+                for (ObjectDetection obj : result.objects) {
+                    // TODO: Carefully with floats comparison
+                    if (obj.object.equals(object) && obj.score >= score) {
+                        builder.addIds(doc.getId());
+                        break;
+                    }
+                }
+            }
+        } catch (InterruptedException | ExecutionException e) {
+            e.printStackTrace();
+        }
+
+        responseObserver.onNext(builder.build());
+        responseObserver.onCompleted();
     }
 
 }

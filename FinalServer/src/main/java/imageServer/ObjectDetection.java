@@ -15,8 +15,8 @@ public class ObjectDetection {
     public ObjectDetection(){}
 
     //GETTERS AND SETTERS
-    public Object getObject() {
-        return Object.newBuilder().setObject(object).setScore(score).build();
+    public String getObject() {
+        return object;
     }
 
     public float getScore() {
