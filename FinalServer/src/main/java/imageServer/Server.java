@@ -132,31 +132,4 @@ public class Server extends imageContractGrpc.imageContractImplBase {
         //TODO: Get images from firestore
     }
 
-    public StreamObserver<ImageInfo> downloadImage(StreamObserver<Image> imageStreamObserver){
-
-        BlobId blobId = BlobId.of(BUCKET_ID, blobName);
-        Blob blob = storage.get(blobId);
-
-        try (ReadChannel reader = blob.reader()) {
-            ByteBuffer buffer = ByteBuffer.allocate(1024);
-
-            while ((reader.read(buffer)) > 0){
-                buffer.flip();
-                Image image = Image
-                        .newBuilder()
-                        .setFilename((fileName))
-                        .setFileExtension(imageExtension)
-                        .setImageBlockBytes(buffer.get())
-                        .build();
-
-                buffer.clear();
-                streamObserver.onNext(image);
-            }
-            streamObserver.onCompleted();
-        } catch (IOException e) {
-            System.out.println(e.getMessage());
-        }
-    }
-
-
 }

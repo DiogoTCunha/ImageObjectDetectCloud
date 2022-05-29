@@ -50,7 +50,9 @@ public class FinalClient {
 
             while(true) {
                 showOptions();
-                switch (in.nextInt()) {
+                int option = in.nextInt();
+                in.nextLine();
+                switch (option) {
                     case 0:
                         System.exit(0);
                     case 1:
@@ -63,7 +65,7 @@ public class FinalClient {
                         getObjects();
                         break;
                     case 4:
-                        downloadImage();
+                        //downloadImage();
                     default:
                         System.out.println("Not a valid operation");
                 }
@@ -134,11 +136,6 @@ public class FinalClient {
         );
     }
 
-    //TODO: Add to contract and override
-    public StreamObserver<Image> downloadImage(StreamObserver<ImageId> responseObserver){
-        return new StreamImage(responseObserver);
-    }
-
     public static void uploadImage(){
         /*
         System.out.println("Insert image path");
@@ -147,7 +144,7 @@ public class FinalClient {
         String imageExtension = in.nextLine();
         */
 
-        String absFileName = "A:\\Dropbox\\CN22\\test.jpg";
+        String absFileName = "C:\\Users\\David\\Desktop\\test.jpg";
         String imageExtension = ".jpg";
 
         Path uploadFrom = Paths.get(absFileName);
@@ -228,10 +225,12 @@ public class FinalClient {
     }
 
     public static void getObjects(){
+        /*
         System.out.println("Insert the image id");
         String id = in.nextLine();
+        */
 
-        //String id = "2022-05-27T00:38:23.951000000Ztest.jpg";
+        String id = "2022-05-29T18:08:31.833000000Ztest.jpg";
 
         ImageId imageId = ImageId
                 .newBuilder()
