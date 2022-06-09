@@ -2,13 +2,11 @@ import com.google.auth.oauth2.GoogleCredentials;
 import com.google.cloud.firestore.Firestore;
 import com.google.cloud.firestore.FirestoreOptions;
 import com.google.cloud.pubsub.v1.Subscriber;
-import com.google.cloud.pubsub.v1.SubscriptionAdminClient;
 import com.google.cloud.storage.Storage;
 import com.google.cloud.storage.StorageOptions;
 import com.google.pubsub.v1.ProjectSubscriptionName;
-import com.google.pubsub.v1.PushConfig;
-import com.google.pubsub.v1.SubscriptionName;
-import com.google.pubsub.v1.TopicName;
+import io.grpc.LoadBalancerRegistry;
+import io.grpc.internal.PickFirstLoadBalancerProvider;
 
 import java.io.IOException;
 import java.util.Scanner;
@@ -25,14 +23,18 @@ public class ObjectDetectApp {
     public static void main(String[] args) {
         initCloudFunctions();
         subscriber = subscribeToMessages();
-        Scanner in = new Scanner(System.in);
 
         System.out.println("Running and waiting for Images");
-        String line = in.nextLine();
+
+
+        while(true) {
+
+        }
 
     }
 
     public static void initCloudFunctions() {
+        LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());
         GoogleCredentials credentials = null;
         try {
             credentials = GoogleCredentials.getApplicationDefault();

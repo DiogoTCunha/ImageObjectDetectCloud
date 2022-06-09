@@ -1,15 +1,20 @@
 import com.google.cloud.pubsub.v1.Subscriber;
 import com.google.pubsub.v1.ProjectSubscriptionName;
+import io.grpc.LoadBalancerRegistry;
+import io.grpc.internal.PickFirstLoadBalancerProvider;
 
 import java.util.Scanner;
 
 public class MonitorApp {
-    static String PROJECT_ID = "CN2122-T3-G07";
+    static String PROJECT_ID = "cn2122-t3-g07";
     static String SUBSCRIPTION_ID = "monitoring";
+    static String ZONE = "europe-west2-c";
+    static String INSTANCE_GROUP = "detect-group";
     static Subscriber subscriber;
 
     public static void main(String[] args) {
 
+        LoadBalancerRegistry.getDefaultRegistry().register(new PickFirstLoadBalancerProvider());
         subscriber = addSubscription();
         
         System.out.println("Monitor app started");

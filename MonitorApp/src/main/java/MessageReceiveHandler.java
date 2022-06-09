@@ -1,24 +1,35 @@
+import com.google.api.gax.longrunning.OperationFuture;
+import com.google.cloud.compute.v1.InstanceGroupManagersClient;
+import com.google.cloud.compute.v1.ListManagedInstancesInstanceGroupManagersRequest;
+import com.google.cloud.compute.v1.ManagedInstance;
+import com.google.cloud.compute.v1.Operation;
 import com.google.cloud.pubsub.v1.AckReplyConsumer;
 import com.google.cloud.pubsub.v1.MessageReceiver;
 import com.google.pubsub.v1.PubsubMessage;
 
+import java.io.IOException;
+
 public class MessageReceiveHandler implements MessageReceiver {
 
-    private static int instances = 0;
+    private static int instances;
     private static final double lowerThreshold = 0.03;
     private static final double upperThreshold = 0.07;
     private static final MessageFreqCounter freqCounter = new MessageFreqCounter(60*1000);
+
+    public MessageReceiveHandler(){
+        instances = getInstanceCount();
+    }
 
     @Override
     public void receiveMessage(PubsubMessage pubsubMessage, AckReplyConsumer ackReplyConsumer) {
 
         freqCounter.increment();
-        double requestsPerMin = freqCounter.getCount();
-        double ref = requestsPerMin / 60;
+        double requestCount = freqCounter.getCount();
+        double ref = requestCount / 60;
 
-        if(ref > lowerThreshold)
+        if(ref > upperThreshold)
             addInstance();
-        if(ref < upperThreshold)
+        if(ref < lowerThreshold)
             removeInstance();
 
         ackReplyConsumer.ack();
@@ -27,38 +38,60 @@ public class MessageReceiveHandler implements MessageReceiver {
     private static void addInstance(){
         if(instances < 4) {
             instances++;
-            launchInstance();
+            resizeManagedInstanceGroup(instances);
         }
-
     }
 
     private static void removeInstance(){
         if(instances > 1){
             instances--;
-            closeInstance();
+            resizeManagedInstanceGroup(instances);
         }
     }
 
-    private static void launchInstance(){
-        //TODO: Implement launch
-    }
-    private static void closeInstance(){
-        //TODO: Implement close
+    private static void resizeManagedInstanceGroup(int size) {
+        System.out.println("Resizing instance group to: " + size);
+
+        InstanceGroupManagersClient managersClient = null;
+        Operation op = null;
+        try {
+            managersClient = InstanceGroupManagersClient.create();
+            OperationFuture<Operation, Operation> result = managersClient.resizeAsync(
+                    MonitorApp.PROJECT_ID,
+                    MonitorApp.ZONE,
+                    MonitorApp.INSTANCE_GROUP,
+                    size
+            );
+            op = result.get();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        assert op != null;
+        System.out.println("Resizing with status " + op.getStatus());
     }
 
-    private static void resizeManagedInstanceGroup(String project, String zone, String instanceGroupName,
-                               int newSize) {
-        System.out.println("================== Resizing instance group");
-        InstanceGroupManagersClient managersClient = InstanceGroupManagersClient.create();
-        OperationFuture<Operation, Operation> result = managersClient.resizeAsync(
-                project,
-                zone,
-                instanceGroupName,
-                newSize
-        );
-        Operation oper=result.get();
-        System.out.println("Resizing with status " + oper.getStatus().toString());
+    private static int getInstanceCount(){
+        InstanceGroupManagersClient managersClient = null;
+        try {
+            managersClient = InstanceGroupManagersClient.create();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        ListManagedInstancesInstanceGroupManagersRequest request =
+                ListManagedInstancesInstanceGroupManagersRequest.newBuilder()
+                        .setInstanceGroupManager(MonitorApp.INSTANCE_GROUP)
+                        .setProject(MonitorApp.PROJECT_ID)
+                        .setReturnPartialSuccess(true)
+                        .setZone(MonitorApp.ZONE)
+                        .build();
+
+        int instanceCount = 0;
+
+        for (ManagedInstance instance: managersClient.listManagedInstances(request).iterateAll()){
+            instanceCount++;
+        }
+
+        return instanceCount;
     }
-
-
 }

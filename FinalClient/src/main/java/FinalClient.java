@@ -31,7 +31,7 @@ public class FinalClient {
     private static imageContractGrpc.imageContractStub noBlockingStub;
     private static imageContractGrpc.imageContractBlockingStub blockingStub;
     private static final Scanner in = new Scanner(System.in);;
-    private static final String cloudFunctionURL = "https://europe-west2-cn2122-t3-g07.cloudfunctions.net/function-2?instanceGroup=instance-group-1";
+    private static final String cloudFunctionURL = "https://europe-west2-cn2122-t3-g07.cloudfunctions.net/function-2?instanceGroup=server-group";
 
     public static void main(String[] args) {
 
@@ -184,7 +184,7 @@ public class FinalClient {
         String path = in.nextLine();
         */
 
-        String id = "2022-05-29T18:08:31.833000000Ztest.jpg";
+        String id = "2022-06-09T20:35:45.124000000Ztest.jpg";
         String path = "A:\\Dropbox\\CN22\\";
 
         ImageId imageId = ImageId
