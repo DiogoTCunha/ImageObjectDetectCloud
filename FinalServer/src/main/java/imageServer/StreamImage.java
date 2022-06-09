@@ -15,13 +15,9 @@ import imagedetect.ImageId;
 import io.grpc.stub.StreamObserver;
 
 import java.io.IOException;
-import java.io.PrintStream;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.concurrent.ExecutionException;
 
 import static imageServer.Server.BUCKET_ID;
@@ -44,6 +40,7 @@ public class StreamImage implements StreamObserver<Image> {
     @Override
     public void onNext(Image image) {
         if (writer == null) {
+            System.out.println("Receiving Image");
             filename = Timestamp.now() + image.getFilename();
             blobId = BlobId.of(BUCKET_ID, filename);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(image.getFileExtension()).build();
@@ -134,7 +131,7 @@ public class StreamImage implements StreamObserver<Image> {
             e.printStackTrace();
         }
 
-        System.out.println("Message Published with ID= " + msgID);
+        System.out.println("Message Published: " + msgID);
         publisher.shutdown();
     }
 }

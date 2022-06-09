@@ -24,7 +24,7 @@ public class MessageReceiveHandler implements MessageReceiver {
         ackReplyConsumer.ack();
     }
 
-    public static void addInstance(){
+    private static void addInstance(){
         if(instances < 4) {
             instances++;
             launchInstance();
@@ -32,17 +32,33 @@ public class MessageReceiveHandler implements MessageReceiver {
 
     }
 
-    public static void removeInstance(){
+    private static void removeInstance(){
         if(instances > 1){
             instances--;
             closeInstance();
         }
     }
 
-    public static void launchInstance(){
+    private static void launchInstance(){
         //TODO: Implement launch
     }
-    public static void closeInstance(){
+    private static void closeInstance(){
         //TODO: Implement close
     }
+
+    private static void resizeManagedInstanceGroup(String project, String zone, String instanceGroupName,
+                               int newSize) {
+        System.out.println("================== Resizing instance group");
+        InstanceGroupManagersClient managersClient = InstanceGroupManagersClient.create();
+        OperationFuture<Operation, Operation> result = managersClient.resizeAsync(
+                project,
+                zone,
+                instanceGroupName,
+                newSize
+        );
+        Operation oper=result.get();
+        System.out.println("Resizing with status " + oper.getStatus().toString());
+    }
+
+
 }

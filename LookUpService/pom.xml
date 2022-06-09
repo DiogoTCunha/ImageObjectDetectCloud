@@ -4,8 +4,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <artifactId>LookUpService</artifactId>
+    <groupId>cn.isel</groupId>
+    <artifactId>LookupService</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <properties>
@@ -13,16 +13,18 @@
         <maven.compiler.target>11</maven.compiler.target>
     </properties>
 
+
+
     <dependencies>
         <dependency>
             <groupId>com.google.cloud.functions</groupId>
             <artifactId>functions-framework-api</artifactId>
-            <version>1.0.1</version>
+            <version>1.0.4</version>
         </dependency>
         <dependency>
             <groupId>com.google.cloud</groupId>
             <artifactId>google-cloud-compute</artifactId>
-            <version>1.2.0-alpha</version>
+            <version>1.10.0</version>
         </dependency>
     </dependencies>
 </project>

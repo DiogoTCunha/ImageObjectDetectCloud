@@ -17,6 +17,6 @@ public class ImageIdStreamObserver implements StreamObserver<ImageId> {
     @Override
     public void onCompleted() {
         System.out.println("Image sent");
-        System.out.println("Id: " + imageId);
+        System.out.println("Id: " + imageId.getId());
     }
 }

@@ -26,20 +26,17 @@ import java.util.Scanner;
 
 public class FinalClient {
 
-    private static String svcIP = "localhost";
+    private static String svcIP;
     private static int svcPort = 8000;
     private static imageContractGrpc.imageContractStub noBlockingStub;
     private static imageContractGrpc.imageContractBlockingStub blockingStub;
     private static final Scanner in = new Scanner(System.in);;
-    private static final String cloudFunctionURL = "https://us-central1-g08-t1d-v2021.cloudfunctions.net/funcIpLookup?instanceGroup=grpc-ig"; //TODO: Replace
-    private static final int MAX_TRIES = 5;
+    private static final String cloudFunctionURL = "https://europe-west2-cn2122-t3-g07.cloudfunctions.net/function-2?instanceGroup=instance-group-1";
 
-
-    //TODO: Add getAnnotatedImage
     public static void main(String[] args) {
 
         try {
-            ManagedChannel channel = ManagedChannelBuilder.forAddress(svcIP, svcPort).usePlaintext().build();
+            ManagedChannel channel = getChannel();
 
             noBlockingStub = imageContractGrpc.newStub(channel);
             blockingStub = imageContractGrpc.newBlockingStub(channel);
@@ -68,59 +65,42 @@ public class FinalClient {
             }
 
         } catch (Exception ex) {
-            System.out.println();
+            System.out.println(ex);
         }
 
     }
 
-    //TODO: Check and use
     private static ManagedChannel getChannel() throws Exception {
         ManagedChannel channel;
-        int tries = MAX_TRIES;
         List<String> ips = null;
 
-        while(tries >= 0) {
+        HttpClient httpClient = HttpClient.newBuilder().build();
+        HttpRequest httpRequest = HttpRequest.newBuilder()
+                .uri(URI.create(cloudFunctionURL))
+                .GET()
+                .build();
 
-            tries--;
+        HttpResponse<String> response = null;
 
-            //Get the list of ips
-            if(ips == null || ips.isEmpty()){
+        try {
+            response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
-                HttpClient httpClient = HttpClient.newBuilder().build();
-                HttpRequest httpRequest = HttpRequest.newBuilder()
-                        .uri(URI.create(cloudFunctionURL))
-                        .GET()
-                        .build();
-
-                HttpResponse<String> response = null;
-
-                try {
-                    response = httpClient.send(httpRequest, HttpResponse.BodyHandlers.ofString());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-
-                if(response != null && response.statusCode() == 200)
-                    ips = new ArrayList<>(List.of(response.body().split("-")));
-            }
-
-
-            if (ips == null) {
-                throw new Exception("IPs is null.");
-            }
+        if(response != null && response.statusCode() == 200) {
+            //Pick a random IP adress and remove it from the list.
+            ips = new ArrayList<>(List.of(response.body().split("-")));
             svcIP = ips.remove((int) (Math.random() * ips.size()));
-
-            //Return a random IP and remove it from the list.
             channel = ManagedChannelBuilder.forAddress(svcIP, svcPort)
                     // Channels are secure by default (via SSL/TLS).
                     // For the example we disable TLS to avoid needing certificates.
                     .usePlaintext()
                     .build();
-
             return channel;
         }
 
-        throw new Exception("Couldn't get channel, max tries exceeded.");
+        throw new Exception("Couldn't get channel.");
     }
 
     public static int getOption(){
@@ -143,7 +123,7 @@ public class FinalClient {
         String imageExtension = in.nextLine();
         */
 
-        String absFileName = "C:\\Users\\David\\Desktop\\test.jpg";
+        String absFileName = "A:\\Dropbox\\CN22\\test.jpg";
         String imageExtension = ".jpg";
 
         Path uploadFrom = Paths.get(absFileName);
