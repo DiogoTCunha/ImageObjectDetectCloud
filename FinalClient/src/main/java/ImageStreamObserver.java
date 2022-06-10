@@ -1,5 +1,7 @@
 import imagedetect.Image;
 import io.grpc.stub.StreamObserver;
+
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,10 +19,12 @@ public class ImageStreamObserver implements StreamObserver<Image> {
 
     @Override
     public void onNext(Image image) {
+
         if(fc == null) {
             try {
-                //TODO: Fix weird filename bug
-                fc = new FileOutputStream(downloadPath + "testannotated.jpg").getChannel();
+                //File names cannot contain ":"
+                String completePath = downloadPath + "\\" +image.getFilename().replace(":", "-");
+                fc = new FileOutputStream(completePath).getChannel();
             } catch (FileNotFoundException e) {
                 System.out.println("File Exception");
             }

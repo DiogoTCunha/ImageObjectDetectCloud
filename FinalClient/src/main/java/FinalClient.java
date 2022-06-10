@@ -27,16 +27,18 @@ import java.util.Scanner;
 public class FinalClient {
 
     private static String svcIP;
-    private static int svcPort = 8000;
+    private static final int svcPort = 8000;
     private static imageContractGrpc.imageContractStub noBlockingStub;
     private static imageContractGrpc.imageContractBlockingStub blockingStub;
-    private static final Scanner in = new Scanner(System.in);;
-    private static final String cloudFunctionURL = "https://europe-west2-cn2122-t3-g07.cloudfunctions.net/function-2?instanceGroup=server-group";
+    private static final Scanner in = new Scanner(System.in);
+    private static final String cloudFunctionURL = "https://europe-west2-cn2122-t3-g07.cloudfunctions.net/lookup-function?instanceGroup=server-group";
 
     public static void main(String[] args) {
 
         try {
             ManagedChannel channel = getChannel();
+
+
 
             noBlockingStub = imageContractGrpc.newStub(channel);
             blockingStub = imageContractGrpc.newBlockingStub(channel);
@@ -65,14 +67,14 @@ public class FinalClient {
             }
 
         } catch (Exception ex) {
-            System.out.println(ex);
+            System.out.println(ex.getMessage());
         }
 
     }
 
     private static ManagedChannel getChannel() throws Exception {
         ManagedChannel channel;
-        List<String> ips = null;
+        List<String> ips;
 
         HttpClient httpClient = HttpClient.newBuilder().build();
         HttpRequest httpRequest = HttpRequest.newBuilder()
@@ -89,12 +91,19 @@ public class FinalClient {
         }
 
         if(response != null && response.statusCode() == 200) {
-            //Pick a random IP adress and remove it from the list.
+
             ips = new ArrayList<>(List.of(response.body().split("-")));
-            svcIP = ips.remove((int) (Math.random() * ips.size()));
+
+            System.out.println("IP List:");
+            for(int i = 0; i < ips.size(); i++){
+                System.out.println(i + "-> " + ips.get(i));
+            }
+
+            System.out.println("Select an IP with the number:");
+            int option = in.nextInt();
+            svcIP = ips.get(option);
+
             channel = ManagedChannelBuilder.forAddress(svcIP, svcPort)
-                    // Channels are secure by default (via SSL/TLS).
-                    // For the example we disable TLS to avoid needing certificates.
                     .usePlaintext()
                     .build();
             return channel;
@@ -116,15 +125,11 @@ public class FinalClient {
     }
 
     public static void uploadImage(){
-        /*
-        System.out.println("Insert image path");
+
+        System.out.println("Insert full image path");
         String absFileName = in.nextLine();
         System.out.println("Insert extension");
         String imageExtension = in.nextLine();
-        */
-
-        String absFileName = "A:\\Dropbox\\CN22\\test.jpg";
-        String imageExtension = ".jpg";
 
         Path uploadFrom = Paths.get(absFileName);
         String fileName = uploadFrom.getFileName().toString();
@@ -176,16 +181,11 @@ public class FinalClient {
 
     public static void downloadImage(){
 
-        /*
         System.out.println("Insert the id");
         String id = in.nextLine();
 
         System.out.println("Insert the download path");
         String path = in.nextLine();
-        */
-
-        String id = "2022-06-09T20:35:45.124000000Ztest.jpg";
-        String path = "A:\\Dropbox\\CN22\\";
 
         ImageId imageId = ImageId
                 .newBuilder()
@@ -195,15 +195,8 @@ public class FinalClient {
         noBlockingStub.downloadImage(imageId, new ImageStreamObserver(path));
     }
 
-
     private static RequestObjectDate getRequestObject(){
 
-        String object = "1D barcode";
-        float score = 0.7381604313850403f;
-        String initialDate = "2022-05-27";
-        String endDate = "2023-01-01";
-
-        /*
         System.out.println("Insert object name");
         String object = in.nextLine();
 
@@ -211,12 +204,12 @@ public class FinalClient {
         float score = in.nextFloat();
         in.nextLine();
 
-        System.out.println("Insert initial date");
+        System.out.println("Insert initial date (yyyy-MM-dd)");
         String initialDate = in.nextLine();
 
-        System.out.println("Insert end date");
+        System.out.println("Insert end date (yyyy-MM-dd)");
         String endDate = in.nextLine();
-        */
+
 
         SimpleDateFormat format = new java.text.SimpleDateFormat("yyyy-MM-dd");
         try {
@@ -236,12 +229,9 @@ public class FinalClient {
     }
 
     public static void getObjects(){
-        /*
+
         System.out.println("Insert the image id");
         String id = in.nextLine();
-        */
-
-        String id = "2022-05-29T18:08:31.833000000Ztest.jpg";
 
         ImageId imageId = ImageId
                 .newBuilder()

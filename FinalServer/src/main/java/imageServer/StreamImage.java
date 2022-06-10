@@ -18,6 +18,8 @@ import java.io.IOException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.concurrent.ExecutionException;
 
 import static imageServer.Server.BUCKET_ID;
@@ -41,7 +43,9 @@ public class StreamImage implements StreamObserver<Image> {
     public void onNext(Image image) {
         if (writer == null) {
             System.out.println("Receiving Image");
-            filename = Timestamp.now() + image.getFilename();
+            Date currentTime = new Date();
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            filename = dateFormat.format(currentTime) + "_" + image.getFilename();
             blobId = BlobId.of(BUCKET_ID, filename);
             BlobInfo blobInfo = BlobInfo.newBuilder(blobId).setContentType(image.getFileExtension()).build();
             writer = storage.writer(blobInfo);

@@ -82,6 +82,11 @@ public class Server extends imageContractGrpc.imageContractImplBase {
         BlobId blobId = BlobId.of(BUCKET_ID, "annotated-" + imageId.getId());
         Blob blob = storage.get(blobId);
 
+        if(blob == null) {
+            responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription("File does not exist")));
+            return;
+        }
+
         try (ReadChannel reader = blob.reader()) {
             ByteBuffer buffer = ByteBuffer.allocate(1024);
             while ((reader.read(buffer)) > 0) {
@@ -114,8 +119,13 @@ public class Server extends imageContractGrpc.imageContractImplBase {
 
                 result = doc.toObject(ObjectDetectionResult.class);
 
-                // TODO: If objects in firestore is null
-                List<ObjectDetection> objects = result.getObjects();
+                List<ObjectDetection> objects;
+                if(result.objects != null) {
+                    objects = result.getObjects();
+                } else {
+                    responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription("No objects were detected")));
+                    return;
+                }
 
                 ImageObjects.Builder builder = ImageObjects.newBuilder();
                 for (ObjectDetection object: objects) {
@@ -129,7 +139,7 @@ public class Server extends imageContractGrpc.imageContractImplBase {
                 responseObserver.onCompleted();
             } else {
 
-                responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription("No such Document")));
+                responseObserver.onError(new StatusException(Status.NOT_FOUND.withDescription("No such document")));
 
             }
         } catch (InterruptedException | ExecutionException e) {
@@ -166,8 +176,9 @@ public class Server extends imageContractGrpc.imageContractImplBase {
             for (DocumentSnapshot doc : querySnapshot.get().getDocuments()) {
                 ObjectDetectionResult result = doc.toObject(ObjectDetectionResult.class);
                 for (ObjectDetection obj : result.objects) {
-                    // TODO: Carefully with floats comparison
-                    if (obj.object.equals(object) && obj.score >= score) {
+
+                    // Check if name matches and score is equal or higher than minimum
+                    if (obj.object.equals(object) && Float.compare(obj.score, score) >= 0) {
                         builder.addIds(doc.getId());
                         break;
                     }
